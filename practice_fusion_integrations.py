@@ -4,7 +4,7 @@ from fake_useragent import UserAgent
 from fastapi import HTTPException
 from fastapi.logger import logger
 from fastapi.responses import JSONResponse
-from helpers.classes.network_requester import NetworkRequester
+from helpers.network.network_requester import NetworkRequester
 from integrations.practicefusion.practicefusion_login_utils import PF_URLS_MAP
 from submodule_integrations.models.integration import Integration
 from submodule_integrations.practicefusion.models.models import (
