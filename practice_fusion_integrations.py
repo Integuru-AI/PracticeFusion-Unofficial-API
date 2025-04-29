@@ -4,7 +4,6 @@ from fake_useragent import UserAgent
 from fastapi import HTTPException
 from fastapi.logger import logger
 from fastapi.responses import JSONResponse
-from helpers.network.network_requester import NetworkRequester
 from integrations.practicefusion.practicefusion_login_utils import PF_URLS_MAP
 from submodule_integrations.models.integration import Integration
 from submodule_integrations.practicefusion.models.models import (
@@ -25,7 +24,7 @@ class PracticeFusionIntegration(Integration):
     def __init__(self, user_agent: str = UserAgent().chrome):
         super().__init__("practicefusion")
         self.user_agent = user_agent
-        self.network_requester: NetworkRequester = None
+        self.network_requester = None
         self.url = "https://static.practicefusion.com"
         self.cookies: str = None
         self.bearer_auth: str = None
