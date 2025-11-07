@@ -67,6 +67,7 @@ class PracticeFusionIntegration(Integration):
             response = await self.network_requester.request(method, url, **kwargs)
             return response
         else:
+            logger.debug(f"Making {method} request to URL {url}")
             async with aiohttp.ClientSession() as session:
                 async with session.request(method, url, **kwargs) as response:
                     return await self._handle_response(response)
@@ -133,6 +134,7 @@ class PracticeFusionIntegration(Integration):
             "Authorization": self.bearer_auth,
             "Sec-Ch-Ua": "'Chromium';v='134', 'Not:A-Brand';v='24', 'Google Chrome';v='134'",
         }
+        logger.debug(f"Setup headers with authorization {_headers['Authorization']}")
         return _headers
 
     async def create_patient(self, request: CreatePatientRequest):
@@ -354,6 +356,7 @@ class PracticeFusionIntegration(Integration):
             f"Creating appointment for {request.schedulerEventParticipants[0].firstName} {request.schedulerEventParticipants[0].lastName}"
         )
         headers = await self._setup_headers()
+        is_conflict_checked = False
         logger.debug("Fetching available appointment types")
         appointment_types_response = await self._make_request(
             "GET", PF_URLS_MAP["appointment_types"], headers=headers
@@ -494,12 +497,13 @@ class PracticeFusionIntegration(Integration):
             }
         }
 
-        await self.check_for_conflicts(
-            provider_guid,
-            facility_guid,
-            request.startAtDateTimeUtc,
-            request.endAtDateTimeUtc,
-        )
+        if is_conflict_checked:
+            await self.check_for_conflicts(
+                provider_guid,
+                facility_guid,
+                request.startAtDateTimeUtc,
+                request.endAtDateTimeUtc,
+            )
 
         logger.debug("Making request to create appointment with payload")
 

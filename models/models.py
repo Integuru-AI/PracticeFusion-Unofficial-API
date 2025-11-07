@@ -39,15 +39,16 @@ class PatientSchedulerParticipant(BaseModel):
 
 class AppointmentRequest(BaseModel):
     facilityName: Optional[str] = None
-    appointmentType: Literal[
-        "Wellness Exam",
-        "Follow-Up Visit",
-        "Nursing Only",
-        "Urgent Visit",
-        "New Patient Visit",
-        "Video Visit",
-        "Procedure",
-    ]
+    # appointmentType: Literal[
+    #     "Wellness Exam",
+    #     "Follow-Up Visit",
+    #     "Nursing Only",
+    #     "Urgent Visit",
+    #     "New Patient Visit",
+    #     "Video Visit",
+    #     "Procedure",
+    # ]
+    appointmentType: str
     schedulerEventParticipants: List[PatientSchedulerParticipant]
     lastModifiedByProvider: Optional[str] = None
     startAtDateTimeUtc: datetime
